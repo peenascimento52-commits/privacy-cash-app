@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 145 63% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 30 30% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 330 80% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 145 63% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 24 100% 50%;
+
+    --radius: 1rem;
+
+    --bonus-bg: 145 50% 95%;
+    --bonus-text: 145 63% 35%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer components {
+  .mobile-container {
+    @apply max-w-md mx-auto min-h-screen bg-background;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-semibold py-4 px-8 rounded-full text-lg shadow-lg hover:opacity-90 transition-all;
+  }
+
+  .btn-option {
+    @apply w-full py-4 px-6 rounded-2xl border-2 border-border bg-card text-foreground font-medium flex items-center justify-center gap-3 hover:border-primary transition-all;
+  }
+
+  .btn-option-selected {
+    @apply border-primary shadow-md;
+  }
+
+  .input-field {
+    @apply w-full py-4 px-4 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+
+  .badge-verified {
+    @apply bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1;
+  }
+
+  .badge-money {
+    @apply bg-secondary text-secondary-foreground px-4 py-2 rounded-full font-bold text-lg;
+  }
+
+  .bonus-card {
+    @apply bg-[hsl(var(--bonus-bg))] rounded-2xl p-6 text-center;
+  }
+
+  .progress-step {
+    @apply flex flex-col items-center gap-2;
+  }
+
+  .progress-step-icon {
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-lg;
+  }
+
+  .progress-step-active {
+    @apply bg-secondary text-secondary-foreground;
+  }
+
+  .progress-step-inactive {
+    @apply bg-muted text-muted-foreground;
+  }
+
+  .progress-step-completed {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .evaluation-badge {
+    @apply bg-accent/10 text-accent px-4 py-2 rounded-full font-medium flex items-center gap-2;
+  }
+}
