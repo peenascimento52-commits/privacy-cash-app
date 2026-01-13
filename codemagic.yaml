@@ -26,16 +26,22 @@ workflows:
           cd ../..
       - name: Build iOS App
         script: |
-          cd ios/App
-          xcodebuild -workspace App.xcworkspace \
+          xcodebuild -workspace ios/App/App.xcworkspace \
             -scheme App \
             -configuration Release \
-            -derivedDataPath build \
+            -derivedDataPath ios/build \
             -allowProvisioningUpdates \
-            clean build
-          cd ../..
+            -archivePath ios/build/PrivacyCash.xcarchive \
+            archive
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath ios/build/PrivacyCash.xcarchive \
+            -exportPath ios/build/ipa \
+            -exportOptionsPlist ios/exportOptions.plist
     artifacts:
-      - ios/App/build/Release-iphoneos/**/*.app
+      - ios/build/ipa/**/*.ipa
+      - ios/build/ipa/**/*.app
     publishing:
       email:
         recipients:
