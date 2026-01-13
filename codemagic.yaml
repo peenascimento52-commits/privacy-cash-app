@@ -8,11 +8,18 @@ workflows:
       xcode: latest
     scripts:
       - name: Install dependencies
-        script: npm install
+        script: |
+          curl -fsSL https://bun.sh/install | bash
+          export PATH="$HOME/.bun/bin:$PATH"
+          bun install
       - name: Build web assets
-        script: npm run build
+        script: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          bun run build
       - name: Sync Capacitor
-        script: npx cap sync ios
+        script: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          npx cap sync ios
       - name: Install CocoaPods
         script: |
           cd ios/App
@@ -41,11 +48,18 @@ workflows:
       node: latest
     scripts:
       - name: Install dependencies
-        script: npm install
+        script: |
+          curl -fsSL https://bun.sh/install | bash
+          export PATH="$HOME/.bun/bin:$PATH"
+          bun install
       - name: Build web assets
-        script: npm run build
+        script: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          bun run build
       - name: Sync Capacitor
-        script: npx cap sync android
+        script: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          npx cap sync android
       - name: Build APK
         script: |
           cd android
