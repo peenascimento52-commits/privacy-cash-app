@@ -62,7 +62,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - $USER_EMAIL
+          - peenascimento52@gmail.com
         notify:
           success: true
           failure: true
