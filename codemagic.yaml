@@ -4,61 +4,27 @@ workflows:
     instance_type: mac_mini_m1
     max_build_duration: 120
     environment:
-      vars:
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-        XCODE_SCHEME: "App"
-        BUNDLE_ID: "com.privacycash.app"
-        APP_STORE_CONNECT_ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID
-        APP_STORE_CONNECT_KEY_IDENTIFIER: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        APP_STORE_CONNECT_PRIVATE_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
       node: latest
       xcode: latest
-
     scripts:
       - name: Install dependencies
-        script: |
-          npm install
-
+        script: npm install
       - name: Build web assets
-        script: |
-          npm run build
-
+        script: npm run build
       - name: Sync Capacitor
-        script: |
-          npx cap sync ios
-
-      - name: Install CocoaPods dependencies
+        script: npx cap sync ios
+      - name: Install CocoaPods
         script: |
           cd ios/App
           pod install
           cd ../..
-
-      - name: Build iOS App Archive
+      - name: Build and Export IPA
         script: |
-          xcodebuild build-for-testing \
-            -workspace $XCODE_WORKSPACE \
-            -scheme $XCODE_SCHEME \
-            -configuration Release \
-            -sdk iphoneos \
-            -derivedDataPath build
-
-      - name: Create IPA
-        script: |
-          xcodebuild -workspace $XCODE_WORKSPACE \
-            -scheme $XCODE_SCHEME \
-            -configuration Release \
-            -sdk iphoneos \
-            -derivedDataPath build \
-            -destination generic/platform=iOS \
-            archive -archivePath build/PrivacyCash.xcarchive && \
-          xcodebuild -exportArchive \
-            -archivePath build/PrivacyCash.xcarchive \
-            -exportOptionsPlist ios/exportOptions.plist \
-            -exportPath build/ipa
-
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -derivedDataPath build
+          cd ../..
     artifacts:
-      - build/ipa/**/*.ipa
-
+      - ios/App/build/**/*.app
     publishing:
       email:
         recipients:
@@ -66,49 +32,28 @@ workflows:
         notify:
           success: true
           failure: true
+
   privacy-cash-android:
     name: PrivacyCash Android Build
     instance_type: linux
     max_build_duration: 120
     environment:
-      java: default
-      vars:
-        ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT
-        PACKAGE_NAME: "com.privacycash.app"
       node: latest
-
     scripts:
       - name: Install dependencies
-        script: |
-          npm install
-
+        script: npm install
       - name: Build web assets
-        script: |
-          npm run build
-
-      - name: Sync Capacitor Android
-        script: |
-          npx cap sync android
-
+        script: npm run build
+      - name: Sync Capacitor
+        script: npx cap sync android
       - name: Build APK
         script: |
           cd android
+          chmod +x gradlew
           ./gradlew clean assembleRelease
           cd ..
-
-      - name: Sign APK
-        script: |
-          echo $ANDROID_KEYSTORE_CONTENT | base64 --decode > android/privacy-cash.keystore
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
-            -keystore android/privacy-cash.keystore \
-            -storepass $ANDROID_KEYSTORE_PASSWORD \
-            -keypass $ANDROID_KEY_PASSWORD \
-            android/app/build/outputs/apk/release/*.apk privacy-cash-key
-          rm android/privacy-cash.keystore
-
     artifacts:
       - android/app/build/outputs/apk/release/**/*.apk
-
     publishing:
       email:
         recipients:
