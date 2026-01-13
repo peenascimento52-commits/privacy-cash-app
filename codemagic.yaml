@@ -7,16 +7,19 @@ workflows:
       node: latest
       xcode: latest
     scripts:
-      - name: Install dependencies
+      - name: Install Bun
         script: |
           curl -fsSL https://bun.sh/install | bash
+          export PATH="$HOME/.bun/bin:$PATH"
+      - name: Install dependencies
+        script: |
           export PATH="$HOME/.bun/bin:$PATH"
           bun install
       - name: Build web assets
         script: |
           export PATH="$HOME/.bun/bin:$PATH"
           bun run build
-      - name: Sync Capacitor
+      - name: Sync Capacitor iOS
         script: |
           export PATH="$HOME/.bun/bin:$PATH"
           npx cap sync ios
@@ -25,7 +28,7 @@ workflows:
           cd ios/App
           pod install
           cd ../..
-      - name: Build and Export IPA
+      - name: Build iOS App
         script: |
           cd ios/App
           xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -derivedDataPath build
@@ -47,16 +50,19 @@ workflows:
     environment:
       node: latest
     scripts:
-      - name: Install dependencies
+      - name: Install Bun
         script: |
           curl -fsSL https://bun.sh/install | bash
+          export PATH="$HOME/.bun/bin:$PATH"
+      - name: Install dependencies
+        script: |
           export PATH="$HOME/.bun/bin:$PATH"
           bun install
       - name: Build web assets
         script: |
           export PATH="$HOME/.bun/bin:$PATH"
           bun run build
-      - name: Sync Capacitor
+      - name: Sync Capacitor Android
         script: |
           export PATH="$HOME/.bun/bin:$PATH"
           npx cap sync android
